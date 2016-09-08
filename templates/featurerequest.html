@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <form style="text-align: center; padding-left: 20%; padding-right: 20%" method="post" action="/featurerequest">
+        <fieldset class="well">
+        <legend class="well-legend"><h3>Request Feature</b></h3></legend>
+            <form data-toggle="validator" role="form">
+	            <div class="form-group" role="form" style="text-align: left" >
+                    <label for="inputTitle" >Title</label>
+                        <input class="form-control" type = "Text" id="inputTitle" name="inputTitle">
+                    <label for="inputDescription">Description</label>
+                        <input class="form-control" type = "Text" aria-multiline="true" id="inputDescription" name="inputDescription"/>
+                    <label for="selectClient">Client</label>
+                        <select data-bind="options: clientlist, optionsValue: 'client_id',
+                       optionsText: 'clientName'"
+                       class="form-control" id="selectClient" name="selectClient">
+                            <option value="0"> -- select an option -- </option>
+                        </select>
+                    <label for="selectPriority">Client Priority</label>
+                        <select class="form-control" id="selectPriority" name="selectPriority" name="selectPriority">
+                            <option disabled selected value> -- select an option -- </option>
+                        </select>
+                    <label for="inputDate">Target Date</label>
+                        <input class="form-control" type = "date" id="inputDate" name="inputDate"/>
+                    <label for="inputURL">URL</label>
+                        <input class="form-control" type = "url" id="inputURL" name="inputURL"/>
+                    <label for="selectProduct">Product Area</label>
+                        <select class="form-control" id="selectProduct" name="selectProduct">
+                            <option disabled selected value> -- select an option -- </option>
+                        </select>
+                    <br />
+                </div>
+                <button type="submit" class="btn btn-primary" >Submit</button>
+            </form>
+        </fieldset>
+    </form>
+</body>
+<script type="text/javascript" src="static/js/jquery-3.1.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="static/css/feature-request.css"/>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.2.0/knockout-min.js"></script>
+    <script type="text/javascript" src="static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="static/js/feature_request.js"></script>
+</html>

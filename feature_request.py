@@ -25,18 +25,37 @@ def save_featurerequest():
     addeddate = datetime.datetime.now()
     active = 1
     assigned = 1
-    f = models.Feature(title, description, client, clientPriority, targetDate, url, productArea, addedby, addeddate, active, assigned)
+    f = models.Feature(title, description, client, clientPriority, datetime.datetime.strptime(targetDate, '%Y-%m-%d'), url, productArea, addedby, addeddate, active, assigned)
+    prioritycheck = models.Feature.query.filter(models.Feature.clientPriority == clientPriority).count()
+    if prioritycheck > 0 :
+        reshuffle =  models.Feature.query.filter(models.Feature.clientPriority >= clientPriority)
+        for r in reshuffle :
+            m = models.Feature.query.filter(models.Feature.id == r.id).update({"clientPriority": models.Feature.clientPriority + 1})
     db_session.add(f)
     db_session.commit()
     return render_template("featurerequest.html");
 
-@app.route('/fillclient')
+@app.route('/fillfeaturerequest', methods=['Get'])
 def fillclient():
     client = models.Client.query.all()
-    entries = [dict(client_id=c.id, clientName=c.client) for c in client]
+    product = models.ProductArea.query.all()
+    cliententries = [dict(client_id=c.id, clientName=c.client) for c in client]
+    productentries = [dict(product_id=p.id, productName=p.productarea) for p in product]
     data = {
         'status': 'OK',
-        'clients': entries
+        'clients': cliententries,
+        'products': productentries
+    }
+    return jsonify(data)
+
+@app.route('/fillfeaturerequest', methods=['Post'])
+def fillpriority():
+    client = request.form['client_id']
+    priority = models.Feature.query.filter(models.Feature.client_id == client).count() + 1
+
+    data = {
+        'status': 'OK',
+        'priority': priority,
     }
     return jsonify(data)
 

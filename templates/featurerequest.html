@@ -14,22 +14,21 @@
                     <label for="inputDescription">Description</label>
                         <input class="form-control" type = "Text" aria-multiline="true" id="inputDescription" name="inputDescription"/>
                     <label for="selectClient">Client</label>
-                        <select data-bind="options: clientlist, optionsValue: 'client_id',
-                       optionsText: 'clientName'"
+                        <select data-bind="options: clientlist, optionsValue: 'client_id', value: selectedChoice,
+                       optionsText: 'clientName', optionsCaption: '-- select an option --', event: { change: selectionChanged }"
                        class="form-control" id="selectClient" name="selectClient">
-                            <option value="0"> -- select an option -- </option>
                         </select>
                     <label for="selectPriority">Client Priority</label>
-                        <select class="form-control" id="selectPriority" name="selectPriority" name="selectPriority">
-                            <option disabled selected value> -- select an option -- </option>
+                        <select data-bind="options: prioritylist, optionsValue: 'priority',
+                       optionsText: 'priority', optionsCaption: '-- select an option --'" class="form-control" id="selectPriority" name="selectPriority" name="selectPriority">
                         </select>
                     <label for="inputDate">Target Date</label>
                         <input class="form-control" type = "date" id="inputDate" name="inputDate"/>
                     <label for="inputURL">URL</label>
                         <input class="form-control" type = "url" id="inputURL" name="inputURL"/>
                     <label for="selectProduct">Product Area</label>
-                        <select class="form-control" id="selectProduct" name="selectProduct">
-                            <option disabled selected value> -- select an option -- </option>
+                        <select data-bind="options: productlist, optionsValue: 'product_id',
+                       optionsText: 'productName', optionsCaption: '-- select an option --'" class="form-control" id="selectProduct" name="selectProduct">
                         </select>
                     <br />
                 </div>
@@ -43,5 +42,5 @@
     <link rel="stylesheet" type="text/css" href="static/css/feature-request.css"/>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.2.0/knockout-min.js"></script>
     <script type="text/javascript" src="static/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="static/js/feature_request.js"></script>
+    <script type="text/javascript" src="static/js/feature_request_viewmodel.js"></script>
 </html>

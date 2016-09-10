@@ -14,12 +14,19 @@ function Priority(data) {
 
 function FeatureRequestViewModel() {
 	var self = this;
+
 	self.selectedChoice = ko.observable();
+	self.prioritylist = ko.observableArray([]);
+	self.clientlist = ko.observableArray([]);
+	self.productlist = ko.observableArray([]);
+	this.optionsCaptionClient = ko.observable('-- select an option --');
+	this.optionsCaptionPriority = ko.observable('-- select an option --');
+	this.optionsCaptionProduct = ko.observable('-- select an option --');
+
 	var data = {
 		client_id: this.selectedChoice
 	};
 
-	self.prioritylist = ko.observableArray([]);
 
 	self.selectionChanged = function () {
 		$.post("/fillfeaturerequest", data, function (returnedData) {
@@ -31,8 +38,6 @@ function FeatureRequestViewModel() {
 		});
 	};
 
-	self.clientlist = ko.observableArray([]);
-	self.productlist = ko.observableArray([]);
 
 	$.getJSON('/fillfeaturerequest', function (featuremodel) {
 		var c = $.map(featuremodel.clients, function (item) {
@@ -45,5 +50,5 @@ function FeatureRequestViewModel() {
 		self.productlist(p)
 	});
 }
-ko.applyBindings(new FeatureRequestViewModel());
 
+ko.applyBindings(new FeatureRequestViewModel());

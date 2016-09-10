@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, flash
 import datetime
 import models
 from database import *
@@ -33,6 +33,7 @@ def save_featurerequest():
             m = models.Feature.query.filter(models.Feature.id == r.id).update({"clientPriority": models.Feature.clientPriority + 1})
     db_session.add(f)
     db_session.commit()
+    flash('New Feature Request Added')
     return render_template("featurerequest.html");
 
 @app.route('/fillfeaturerequest', methods=['Get'])
@@ -60,6 +61,9 @@ def fillpriority():
     return jsonify(data)
 
 if __name__ == '__main__':
+    app.secret_key = 'super secret key'
+    app.config['SESSION_TYPE'] = 'filesystem'
+
     app.run()
 
 @app.teardown_appcontext

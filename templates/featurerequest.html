@@ -2,37 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% extends "header.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+  {{ super() }}
 </head>
+{% endblock %}
+{% block content %}
 <body>
     <form style="text-align: center; padding-left: 20%; padding-right: 20%" method="post" action="/featurerequest">
         <fieldset class="well">
-        <legend class="well-legend"><h3>Request Feature</b></h3></legend>
+        <legend class="well-legend">Request Feature</legend>
             <form data-toggle="validator" role="form">
 	            <div class="form-group" role="form" style="text-align: left" >
-                    <label for="inputTitle" >Title</label>
-                        <input class="form-control" type = "Text" id="inputTitle" name="inputTitle">
+                    <label for="inputTitle">Title</label>
+                        <input class="form-control input-lg" type = "Text" id="inputTitle" name="inputTitle" required>
                     <label for="inputDescription">Description</label>
-                        <input class="form-control" type = "Text" aria-multiline="true" id="inputDescription" name="inputDescription"/>
+                        <input class="form-control" type = "Text" aria-multiline="true" id="inputDescription" name="inputDescription" required/>
                     <label for="selectClient">Client</label>
-                        <select data-bind="options: clientlist, optionsValue: 'client_id', value: selectedChoice,
-                       optionsText: 'clientName', optionsCaption: '-- select an option --', event: { change: selectionChanged }"
+                        <select required data-bind="options: clientlist, optionsValue: 'client_id', value: selectedChoice,
+                       optionsText: 'clientName', optionsCaption: optionsCaptionClient, event: { change: selectionChanged }"
                        class="form-control" id="selectClient" name="selectClient">
                         </select>
                     <label for="selectPriority">Client Priority</label>
-                        <select data-bind="options: prioritylist, optionsValue: 'priority',
-                       optionsText: 'priority', optionsCaption: '-- select an option --'" class="form-control" id="selectPriority" name="selectPriority" name="selectPriority">
+                        <select required data-bind="options: prioritylist, optionsValue: 'priority',
+                       optionsText: 'priority', optionsCaption: optionsCaptionPriority" class="form-control" id="selectPriority" name="selectPriority" name="selectPriority">
                         </select>
                     <label for="inputDate">Target Date</label>
-                        <input class="form-control" type = "date" id="inputDate" name="inputDate"/>
+                        <input class="form-control" id="inputDate" type="date" name="inputDate" placeholder="YYYY-MM-DD" data-date-split-input="true" required/>
                     <label for="inputURL">URL</label>
-                        <input class="form-control" type = "url" id="inputURL" name="inputURL"/>
+                        <input required class="form-control" type = "url" id="inputURL" name="inputURL"/>
                     <label for="selectProduct">Product Area</label>
-                        <select data-bind="options: productlist, optionsValue: 'product_id',
-                       optionsText: 'productName', optionsCaption: '-- select an option --'" class="form-control" id="selectProduct" name="selectProduct">
+                        <select required data-bind="options: productlist, optionsValue: 'product_id',
+                       optionsText: 'productName', optionsCaption: optionsCaptionProduct" class="form-control" id="selectProduct" name="selectProduct">
                         </select>
                     <br />
                 </div>
-                <button type="submit" class="btn btn-primary" >Submit</button>
+                <button disable type="submit" class="btn btn-primary" >Submit</button>
             </form>
         </fieldset>
     </form>
@@ -42,5 +48,15 @@
     <link rel="stylesheet" type="text/css" href="static/css/feature-request.css"/>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.2.0/knockout-min.js"></script>
     <script type="text/javascript" src="static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="static/js/bootstrap-theme.min.css"></script>
     <script type="text/javascript" src="static/js/feature_request_viewmodel.js"></script>
+    <script type="text/javascript">
+       $(function(){
+    $('[type="date"]').prop('min', function(){
+        return new Date().toJSON().split('T')[0];
+    });
+});
+
+    </script>
+{% endblock %}
 </html>

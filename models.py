@@ -4,18 +4,26 @@ from sqlalchemy.ext.declarative import *
 
 from database import Base
 
+
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True)
     email = Column(String(120), unique=True)
+    password = Column(String(255))
+    active = Column(Boolean())
+    role = Column(String(40))
 
-    def __init__(self, name=None, email=None):
+    def __init__(self, name=None, email=None, password=None, active=None, confirmed_at=None, role=None):
         self.name = name
         self.email = email
+        self.password = password
+        self.active = active
+        self.confirmed_at = confirmed_at
+        self.role=role
 
     def __repr__(self):
-        return '<User %r>' % (self.name)
+        return "<User(id='%d', name='%s', email='%s', password='%d', active='%d', confirmed_at='%s', role='%s'>" % (self.id, self.name, self.email, self.password, self.active, self.confirmed_at, self.role)
 
 class Client(Base):
     __tablename__ = 'client'
@@ -26,7 +34,7 @@ class Client(Base):
         self.client = client
 
     def __repr__(self):
-        return '<id %d, client %s>' % (self.id, self.client)
+        return "<Client(id='%d', client='%s'>" % (self.id, self.client)
 
 class ProductArea(Base):
     __tablename__ = 'productarea'

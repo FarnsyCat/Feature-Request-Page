@@ -1,22 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    {% extends "header.html" %}
-{% block title %}Index{% endblock %}
-{% block head %}
-  {{ super() }}
-</head>
-{% endblock %}
+
+{% extends "header.html" %}
 {% block content %}
-<body>
     <form style="text-align: center; padding-left: 20%; padding-right: 20%" method="post" action="/featurerequest">
         <fieldset class="well">
         <legend class="well-legend">Request Feature</legend>
             <form data-toggle="validator" role="form">
 	            <div class="form-group" role="form" style="text-align: left" >
                     <label for="inputTitle">Title</label>
-                        <input class="form-control input-lg" type = "Text" id="inputTitle" name="inputTitle" required>
+                        <input class="form-control" type = "Text" id="inputTitle" name="inputTitle" required>
                     <label for="inputDescription">Description</label>
                         <input class="form-control" type = "Text" aria-multiline="true" id="inputDescription" name="inputDescription" required/>
                     <label for="selectClient">Client</label>
@@ -39,24 +30,16 @@
                     <br />
                 </div>
                 <button disable type="submit" class="btn btn-primary" >Submit</button>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="alert alert-success" id="alert">
+                        {% for message in messages %}
+                       {{ message }}
+                {% endfor %}
+                    </div>
+                        {% endif %}
+            {% endwith %}
             </form>
         </fieldset>
     </form>
-</body>
-<script type="text/javascript" src="static/js/jquery-3.1.0.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="static/css/feature-request.css"/>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.2.0/knockout-min.js"></script>
-    <script type="text/javascript" src="static/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="static/js/bootstrap-theme.min.css"></script>
-    <script type="text/javascript" src="static/js/feature_request_viewmodel.js"></script>
-    <script type="text/javascript">
-       $(function(){
-    $('[type="date"]').prop('min', function(){
-        return new Date().toJSON().split('T')[0];
-    });
-});
-
-    </script>
 {% endblock %}
-</html>

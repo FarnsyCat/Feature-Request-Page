@@ -10,11 +10,11 @@ Feature request base functionality, need error checking before submission and re
 9/9/2016
 Added nav bar in header as master page and changed min date to today for feature request
 
+9/12/2016
+Admin page created for client and productarea crud
+
 --To Do--
 
-Add Frontend for crud operations(client and product)
-Add Login
-Add Navbar
 Add Assignment page and client filtering
 Add Error checking
 Create test module

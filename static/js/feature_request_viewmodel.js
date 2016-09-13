@@ -22,7 +22,6 @@ function FeatureRequestViewModel() {
 	this.optionsCaptionClient = ko.observable('-- select an option --');
 	this.optionsCaptionPriority = ko.observable('-- select an option --');
 	this.optionsCaptionProduct = ko.observable('-- select an option --');
-
 	var data = {
 		client_id: this.selectedChoice
 	};
@@ -50,5 +49,4 @@ function FeatureRequestViewModel() {
 		self.productlist(p)
 	});
 }
-
-ko.applyBindings(new FeatureRequestViewModel());
+ko.applyBindings(new FeatureRequestViewModel(), document.getElementById('ViewFeatureRequest'));

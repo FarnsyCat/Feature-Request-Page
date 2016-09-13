@@ -1,41 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <div id="ViewHeader">
     <nav class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <div class="navbar-header"></div>
         <ul class="nav navbar-nav">
-
             <li {% if request.path == '/' %}class="active"{% endif %}><a href="#">My Assignments</a></li>
             <li {% if request.path == '/featurerequest' %}class="active"{% endif %}><a href="/featurerequest">Feature Request</a></li>
             <li {% if request.path == '/clientfeatures' %}class="active"{% endif %}><a href="#">Client Features</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Add Client</a></li>
-                    <li><a href="#">Add Product</a></li>
-                </ul>
-            </li>
+            <li><a href="/admin">Admin</a></li>
             <li>
                 <li><a href="/logout">Logout</a></li>
             </li>
         </ul>
         </div>
     </nav>
+
+</div>
+
 </head>
 <body>
   <div id="content">{% block content %}{% endblock %}</div>
- <script type="text/javascript" src="static/js/jquery-3.1.0.min.js"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css"/>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.2.0/knockout-min.js"></script>
-<script type="text/javascript" src="static/js/bootstrap-theme.min.css"></script>
-    <script type="text/javascript" src="static/js/feature_request_viewmodel.js"></script>
-    <link rel="stylesheet" type="text/css" href="static/css/bootstrap-responsive.min.css"/>
-    <link rel="stylesheet" type="text/css" href="static/css/feature-request.css"/>
-    <script type="text/javascript">
+
+
+  <script type="text/javascript" src="static/js/jquery-3.1.0.min.js"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <link rel="stylesheet" type="text/css" href="static/css/bootstrap-theme.min.css"/>
+  <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css"/>
+  <link rel="stylesheet" type="text/css" href="static/css/feature-request.css"/>
+ <script src="http://cdnjs.cloudflare.com/ajax/libs/knockout/2.2.0/knockout-min.js"></script>
+  <script type="text/javascript" src="static/js/header_viewmodel.js"></script>
+ <script type="text/javascript" src="static/js/feature_request_viewmodel.js"></script>
+
+
+
+
+ <script type="text/javascript">
        $(function(){
     $('[type="date"]').prop('min', function(){
         return new Date().toJSON().split('T')[0];

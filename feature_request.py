@@ -1,6 +1,8 @@
 import os
 import random
 from flask import Flask, render_template, request, jsonify, flash, session, redirect, url_for
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 import datetime
 import models
 from database import *
@@ -10,6 +12,9 @@ import bcrypt
 app = Flask(__name__)
 init_db()
 
+admin = Admin(app, name='Feature Request Administration', template_mode='bootstrap3')
+admin.add_view(ModelView(models.Client, db_session))
+admin.add_view(ModelView(models.ProductArea, db_session))
 
 @app.route('/')
 def index():
@@ -26,6 +31,8 @@ def login():
             hashed = bcrypt.hashpw(request.form['pass'].encode('utf-8'), r.password)
             if hashed == r.password and request.form['username'] == r.name:
                 session['username'] = request.form['username']
+                session['userrole'] = r.role
+                session['userid'] = r.id
                 return redirect(url_for('index'))
     session.pop('_flashes', None)
     flash('User name or password does not match', 'error')
@@ -75,7 +82,7 @@ def save_featurerequest():
     db_session.commit()
     session.pop('_flashes', None)
     flash('New Feature Request Added')
-    return render_template("featurerequest.html");
+    return render_template("featurerequest.html")
 
 @app.route('/fillfeaturerequest', methods=['Get'])
 def fillclient():
@@ -106,8 +113,23 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+@app.route('/getclients', methods=['Get'])
+def getclients():
+    clients = models.Client.query.all()
+    cliententries = [dict(client_id=c.id, clientName=c.client) for c in clients]
+    data = {
+        'status': 'OK',
+        'clients': cliententries,
+    }
+    return jsonify(data)
+
+@app.route('/adminclients', methods=['Get'])
+def clientspage():
+    return render_template("adminclients.html");
+
+
 if __name__ == '__main__':
-    app.secret_key = 'so super secret key'
+    app.secret_key = 'so1-super2-secret3-key4'
     app.config['SESSION_TYPE'] = 'filesystem'
     app.run()
 

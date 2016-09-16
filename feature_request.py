@@ -16,6 +16,7 @@ admin = Admin(app, name='Feature Request Administration', template_mode='bootstr
 admin.add_view(ModelView(models.Client, db_session))
 admin.add_view(ModelView(models.ProductArea, db_session))
 
+
 @app.route('/')
 def index():
     if 'username' in session:
@@ -72,12 +73,14 @@ def save_featurerequest():
     addeddate = datetime.datetime.now()
     active = 1
     assigned = 1
+    client_id = models.Client.query.filter(models.Client.client == client)
     f = models.Feature(title, description, client, clientPriority, datetime.datetime.strptime(targetDate, '%Y-%m-%d'), url, productArea, addedby, addeddate, active, assigned)
-    prioritycheck = models.Feature.query.filter(models.Feature.clientPriority == clientPriority).count()
+    prioritycheck = models.Feature.query.filter(models.Feature.clientPriority == clientPriority and models.Feature.client == client).count()
     if prioritycheck > 0 :
-        reshuffle =  models.Feature.query.filter(models.Feature.clientPriority >= clientPriority)
-        for r in reshuffle :
-            m = models.Feature.query.filter(models.Feature.id == r.id).update({"clientPriority": models.Feature.clientPriority + 1})
+        for c in client_id:
+            reshuffle =  models.Feature.query.filter(models.Feature.client_id == c).filter(models.Feature.clientPriority >= clientPriority)
+            for r in reshuffle :
+                m = models.Feature.query.filter(models.Feature.id == r.id).update({"clientPriority": models.Feature.clientPriority + 1})
     db_session.add(f)
     db_session.commit()
     session.pop('_flashes', None)

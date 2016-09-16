@@ -1,15 +1,9 @@
-import os
-import random
-from flask_wtf import Form
 from flask import Flask, render_template, request, jsonify, flash, session, redirect, url_for
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 import datetime
 import models
-from flask.ext.wtf import Form
-from wtforms.ext.appengine.db import model_form
 from database import *
-from sqlalchemy.sql import *
 import bcrypt
 
 app = Flask(__name__)
@@ -20,11 +14,13 @@ admin.add_view(ModelView(models.Client, db_session))
 admin.add_view(ModelView(models.ProductArea, db_session))
 username = "";
 
+
 @app.route('/')
 def index():
     if 'username' in session:
-        return redirect(url_for('display_featurerequest'))
+        return render_template('home.html', name=session['username'])
     return render_template('index.html')
+
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -42,6 +38,7 @@ def login():
     flash('User name or password does not match', 'error')
     return render_template('index.html')
 
+
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
@@ -57,18 +54,21 @@ def register():
         flash('User Already Exists', 'error')
     return render_template('register.html')
 
+
 @app.route('/featurerequest', methods=['Get'])
 def display_featurerequest():
     if 'username' in session:
-        return render_template("featurerequest.html");
+        return render_template("featurerequest.html", name=session['username']);
     return redirect(url_for('index'))
+
 
 @app.route('/features', methods=['Get'])
 def display_features():
     if 'username' in session:
         featurerequest = models.Feature.query.all()
-        return render_template("features.html", featurerequest=featurerequest)
+        return render_template("features.html", featurerequest=featurerequest, name=session['username'])
     return redirect(url_for('index'))
+
 
 @app.route('/featurerequest', methods=['Post'])
 def save_featurerequest():
@@ -83,19 +83,24 @@ def save_featurerequest():
     addeddate = datetime.datetime.now()
     active = 1
     assigned = 1
-    client_id = models.Client.query.filter(models.Client.client == client)
-    f = models.Feature(title, description, client, clientPriority, datetime.datetime.strptime(targetDate, '%Y-%m-%d'), url, productArea, addedby, addeddate, active, assigned)
-    prioritycheck = models.Feature.query.filter(models.Feature.clientPriority == clientPriority and models.Feature.client == client).count()
-    if prioritycheck > 0 :
-        for c in client_id:
-            reshuffle =  models.Feature.query.filter(models.Feature.client_id == c).filter(models.Feature.clientPriority >= clientPriority)
-            for r in reshuffle :
-                m = models.Feature.query.filter(models.Feature.id == r.id).update({"clientPriority": models.Feature.clientPriority + 1})
+    f = models.Feature(title, description, client, clientPriority, datetime.datetime.strptime(targetDate, '%Y-%m-%d'),
+                       url, productArea, addedby, addeddate, active, assigned)
+    prioritycheck = models.Feature.query.filter(
+        models.Feature.clientPriority == clientPriority and models.Feature.client == client).count()
+    if prioritycheck > 0:
+        print(client)
+        reshuffle = models.Feature.query.filter(models.Feature.client_id == client).filter(
+                models.Feature.clientPriority >= clientPriority)
+        for r in reshuffle:
+            print(prioritycheck)
+            m = models.Feature.query.filter(models.Feature.id == r.id).update(
+                {"clientPriority": models.Feature.clientPriority + 1})
     db_session.add(f)
     db_session.commit()
     session.pop('_flashes', None)
     flash('New Feature Request Added')
-    return render_template("featurerequest.html")
+    return render_template("featurerequest.html", name=session['username'])
+
 
 @app.route('/fillfeaturerequest', methods=['Get'])
 def fillclient():
@@ -110,6 +115,7 @@ def fillclient():
     }
     return jsonify(data)
 
+
 @app.route('/ViewFeatures', methods=['Get'])
 def viewFeatures():
     client = models.Client.query.all()
@@ -122,6 +128,7 @@ def viewFeatures():
         'products': productentries
     }
 
+
 @app.route('/fillfeaturerequest', methods=['Post'])
 def fillpriority():
     client = request.form['client_id']
@@ -133,10 +140,12 @@ def fillpriority():
     }
     return jsonify(data)
 
+
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('index'))
+
 
 @app.route('/getclients', methods=['Get'])
 def getclients():
@@ -147,6 +156,7 @@ def getclients():
         'clients': cliententries,
     }
     return jsonify(data)
+
 
 @app.route('/adminclients', methods=['Get'])
 def clientspage():

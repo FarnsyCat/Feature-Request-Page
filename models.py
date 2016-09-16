@@ -20,10 +20,12 @@ class User(Base):
         self.password = password
         self.active = active
         self.confirmed_at = confirmed_at
-        self.role=role
+        self.role = role
 
     def __repr__(self):
-        return "<User(id='%d', name='%s', email='%s', password='%d', active='%d', confirmed_at='%s', role='%s'>" % (self.id, self.name, self.email, self.password, self.active, self.confirmed_at, self.role)
+        return "<User(id='%d', name='%s', email='%s', password='%d', active='%d', confirmed_at='%s', role='%s'>" % (
+        self.id, self.name, self.email, self.password, self.active, self.confirmed_at, self.role)
+
 
 class Client(Base):
     __tablename__ = 'client'
@@ -36,6 +38,7 @@ class Client(Base):
     def __repr__(self):
         return "<Client(id='%d', client='%s'>" % (self.id, self.client)
 
+
 class ProductArea(Base):
     __tablename__ = 'productarea'
     id = Column(Integer, primary_key=True)
@@ -46,6 +49,7 @@ class ProductArea(Base):
 
     def __repr__(self):
         return '<id %d, productarea %s>' % (self.id, self.productarea)
+
 
 class Feature(Base):
     __tablename__ = 'feature'
@@ -83,6 +87,7 @@ class Feature(Base):
 
     def __repr__(self):
         return "<Feature(id='%d', title='%s', description='%s', clientid='%d', clientname='%s', clientPriority='%d', targetDate='%s', url='%s', productArea_id='%d', productarea='%s', assigned_id='%d', userassigned='%s', addeddate='%s', useradded='%s', addedby='%d', active='%d') >" % (
-        self.id, self.title, self.description, self.client_id, self.client.client, self.clientPriority, self.targetDate,
-        self.url, self.productArea, self.product.productarea, self.assigned_id, self.userassigned.name,
-        self.addeddate, self.useradded.name, self.addedby, self.active)
+            self.id, self.title, self.description, self.client_id, self.client.client, self.clientPriority,
+            self.targetDate,
+            self.url, self.productArea, self.product.productarea, self.assigned_id, self.userassigned.name,
+            self.addeddate, self.useradded.name, self.addedby, self.active)

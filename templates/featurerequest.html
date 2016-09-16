@@ -1,45 +1,48 @@
-
 {% extends "header.html" %}
 {% block content %}
-<div id="ViewFeatureRequest" >
+<div id="ViewFeatureRequest">
     <form style="text-align: center; padding-left: 20%; padding-right: 20%" method="post" action="/featurerequest">
         <fieldset class="well">
-        <legend class="well-legend">Request Feature</legend>
+            <legend class="well-legend">Request Feature</legend>
             <form data-toggle="validator" role="form">
-	            <div class="form-group" role="form" style="text-align: left" >
+                <div class="form-group" role="form" style="text-align: left">
                     <label for="inputTitle">Title</label>
-                        <input class="form-control" type = "Text" id="inputTitle" name="inputTitle" required>
+                    <input class="form-control" type="Text" id="inputTitle" name="inputTitle" required>
                     <label for="inputDescription">Description</label>
-                        <input class="form-control" type = "Text" aria-multiline="true" id="inputDescription" name="inputDescription" required/>
+                    <input class="form-control" type="Text" aria-multiline="true" id="inputDescription"
+                           name="inputDescription" required/>
                     <label for="selectClient">Client</label>
-                        <select required data-bind="options: clientlist, optionsValue: 'client_id', value: selectedChoice,
+                    <select required data-bind="options: clientlist, optionsValue: 'client_id', value: selectedChoice,
                        optionsText: 'clientName', optionsCaption: optionsCaptionClient, event: { change: selectionChanged }"
-                       class="form-control" id="selectClient" name="selectClient">
-                        </select>
+                            class="form-control" id="selectClient" name="selectClient">
+                    </select>
                     <label for="selectPriority">Client Priority</label>
-                        <select required data-bind="options: prioritylist, optionsValue: 'priority',
-                       optionsText: 'priority', optionsCaption: optionsCaptionPriority" class="form-control" id="selectPriority" name="selectPriority" name="selectPriority">
-                        </select>
+                    <select required data-bind="options: prioritylist, optionsValue: 'priority',
+                       optionsText: 'priority', optionsCaption: optionsCaptionPriority" class="form-control"
+                            id="selectPriority" name="selectPriority" name="selectPriority">
+                    </select>
                     <label for="inputDate">Target Date</label>
-                        <input class="form-control" id="inputDate" type="date" name="inputDate" placeholder="YYYY-MM-DD" data-date-split-input="true" required/>
+                    <input class="form-control" id="inputDate" type="date" name="inputDate" placeholder="YYYY-MM-DD"
+                           data-date-split-input="true" required/>
                     <label for="inputURL">URL</label>
-                        <input required class="form-control" type = "url" id="inputURL" name="inputURL"/>
+                    <input required class="form-control" type="url" id="inputURL" name="inputURL"/>
                     <label for="selectProduct">Product Area</label>
-                        <select required data-bind="options: productlist, optionsValue: 'product_id',
-                       optionsText: 'productName', optionsCaption: optionsCaptionProduct" class="form-control" id="selectProduct" name="selectProduct">
-                        </select>
-                    <br />
+                    <select required data-bind="options: productlist, optionsValue: 'product_id',
+                       optionsText: 'productName', optionsCaption: optionsCaptionProduct" class="form-control"
+                            id="selectProduct" name="selectProduct">
+                    </select>
+                    <br/>
                 </div>
-                <button disable type="submit" class="btn btn-primary" >Submit</button>
+                <button disable type="submit" class="btn btn-primary">Submit</button>
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
-                    <div class="alert alert-success" id="alert">
-                        {% for message in messages %}
-                       {{ message }}
-                {% endfor %}
-                    </div>
-                        {% endif %}
-            {% endwith %}
+                <div class="alert alert-success" id="alert">
+                    {% for message in messages %}
+                    {{ message }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
             </form>
         </fieldset>
     </form>

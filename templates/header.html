@@ -6,9 +6,9 @@
         <div class="container-fluid">
             <div class="navbar-header"></div>
         <ul class="nav navbar-nav">
-            <li {% if request.path == '/' %}class="active"{% endif %}><a href="#">My Assignments</a></li>
+            <li {% if request.path == '/' %}class="active"{% endif %}><a href="/">Home</a></li>
             <li {% if request.path == '/featurerequest' %}class="active"{% endif %}><a href="/featurerequest">Feature Request</a></li>
-            <li {% if request.path == '/clientfeatures' %}class="active"{% endif %}><a href="#">Client Features</a></li>
+            <li {% if request.path == '/features' %}class="active"{% endif %}><a href="/features">Client Features</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="/admin">Admin</a></li>

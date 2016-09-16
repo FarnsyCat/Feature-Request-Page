@@ -1,10 +1,13 @@
 import os
 import random
+from flask_wtf import Form
 from flask import Flask, render_template, request, jsonify, flash, session, redirect, url_for
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 import datetime
 import models
+from flask.ext.wtf import Form
+from wtforms.ext.appengine.db import model_form
 from database import *
 from sqlalchemy.sql import *
 import bcrypt
@@ -15,7 +18,7 @@ init_db()
 admin = Admin(app, name='Feature Request Administration', template_mode='bootstrap3')
 admin.add_view(ModelView(models.Client, db_session))
 admin.add_view(ModelView(models.ProductArea, db_session))
-
+username = "";
 
 @app.route('/')
 def index():
@@ -60,6 +63,13 @@ def display_featurerequest():
         return render_template("featurerequest.html");
     return redirect(url_for('index'))
 
+@app.route('/features', methods=['Get'])
+def display_features():
+    if 'username' in session:
+        featurerequest = models.Feature.query.all()
+        return render_template("features.html", featurerequest=featurerequest)
+    return redirect(url_for('index'))
+
 @app.route('/featurerequest', methods=['Post'])
 def save_featurerequest():
     title = request.form['inputTitle']
@@ -99,6 +109,18 @@ def fillclient():
         'products': productentries
     }
     return jsonify(data)
+
+@app.route('/ViewFeatures', methods=['Get'])
+def viewFeatures():
+    client = models.Client.query.all()
+    product = models.ProductArea.query.all()
+    cliententries = [dict(client_id=c.id, clientName=c.client) for c in client]
+    productentries = [dict(product_id=p.id, productName=p.productarea) for p in product]
+    data = {
+        'status': 'OK',
+        'clients': cliententries,
+        'products': productentries
+    }
 
 @app.route('/fillfeaturerequest', methods=['Post'])
 def fillpriority():

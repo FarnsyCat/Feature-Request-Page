@@ -1,0 +1,36 @@
+{% extends "header.html" %}
+{% block content %}
+
+    <div class="container">
+  <h2>Feature Requests</h2>
+  <p></p>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Priority</th>
+          <th>Client Name</th>
+          <th>Area</th>
+          <th>Url</th>
+          <th>Description</th>
+          <th>targetDate</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for feature in featurerequest %}
+      <tr>
+        <td>{{ feature.title }}</td>
+        <td>{{ feature.clientPriority }}</td>
+        <td>{{ feature.client.client }}</td>
+        <td>{{ feature.product.productarea }}</td>
+        <td>{{ feature.url }}</td>
+        <td>{{ feature.description }}</td>
+        <td>{{ feature.targetDate }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+        <div><p></p></div>
+
+{% endblock %}

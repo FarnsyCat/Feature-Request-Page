@@ -19,6 +19,7 @@ Flask-Principal==0.4.0
 Flask-Security==1.7.5
 Flask-SQLAlchemy==2.0
 Flask-WTF==0.12
+gunicorn==19.6.0
 itsdangerous==0.24
 Jinja2==2.8
 js.knockout==3.1.0

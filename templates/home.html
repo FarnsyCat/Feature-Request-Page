@@ -2,8 +2,37 @@
 {% block content %}
 <div class="container">
     <div class="jumbotron">
+        <title>Feature Request System</title>
         <h1>Welcome {{ name }} </h1>
         <p>This is a Feature Management System</p>
     </div>
+</div>
+<div style="text-align: center">
+    <h4>My Assignments</h4>
+        <span>You have <u>{{features.count()}}</u> assignments</span>
+    <div class="container">
+    {% set count = 0 %}
+        {% set countfeature = 0 %}
+        <table style="width: 100%; text-align: center">
+        {% for feature in features %}
+        {% if count == 0 %}<tr>{% endif %}
+            <td>
+
+            </td>
+            <td style="width: 20%; text-align: center">
+          <fieldset class="well">
+            <legend class="well-legend"><a href="/features/{{ feature.id }}">{{ feature.title }}</a></legend>
+                      Priority: {{ feature.clientPriority }}</br>Client: {{ feature.client.client }}
+              </fieldset>
+            </td>
+            <td>
+
+            </td>
+           {% if count == 3 %}</tr>{% set count = 0 %}{% endif %}
+            {% set count = count + 1 %}
+            {% set countfeature = countfeature + 1 %}
+            {% if countfeatures == features.count() %} </table> {% endif %}
+        {% endfor %}
+        </div>
 </div>
 {% endblock %}

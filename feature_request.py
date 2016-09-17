@@ -18,7 +18,9 @@ username = "";
 @app.route('/')
 def index():
     if 'username' in session:
-        return render_template('home.html', name=session['username'])
+        features = models.Feature.query.filter(models.Feature.assigned == session['username']).order_by(
+            models.Feature.clientPriority.asc())
+        return render_template('home.html', name=session['username'], features=features)
     return render_template('index.html')
 
 
@@ -69,6 +71,50 @@ def display_features():
         return render_template("features.html", featurerequest=featurerequest, name=session['username'])
     return redirect(url_for('index'))
 
+@app.route('/features/<feature_identifier>', methods=['Get'])
+def show_item_info(feature_identifier):
+    if 'username' in session:
+        feature = models.Feature.query.get(feature_identifier)
+        messages = models.MessageBoard.query.filter(models.MessageBoard.feature_id == feature_identifier).order_by(models.MessageBoard.date.asc())
+        return render_template('feature.html',feature=feature, messages=messages, name=session['username'])
+    return redirect(url_for('index'))
+
+@app.route('/features/<feature_identifier>', methods=['Post'])
+def save_item_info(feature_identifier):
+    if 'username' in session:
+        feature = models.Feature.query.get(feature_identifier)
+        if request.form['submit']=='Assign':
+            feature.assigned = name=session['username']
+            feature.completed = 2
+            session.pop('_flashes', None)
+            flash('Feature assigned to you!')
+        elif request.form['submit']=='Complete':
+            priority = feature.clientPriority
+            feature.completed = 3
+            feature.assigned = "Complete"
+            feature.clientPriority = 0
+            prioritycheck = models.Feature.query.filter(
+                models.Feature.clientPriority == priority and models.Feature.client == feature.client).count()
+            if prioritycheck > 0:
+                reshuffle = models.Feature.query.filter(models.Feature.client_id == feature.client_id).filter(
+                    models.Feature.clientPriority > priority)
+                for r in reshuffle:
+                    print(prioritycheck)
+                    m = models.Feature.query.filter(models.Feature.id == r.id).update(
+                        {"clientPriority": models.Feature.clientPriority - 1})
+            db_session.commit()
+            session.pop('_flashes', None)
+            flash('Completed!')
+        elif request.form['submit']=='AddComment' and len(request.form['comment']) > 0:
+            m = models.MessageBoard(request.form['comment'], session['username'], feature_identifier, datetime.datetime.now())
+            db_session.add(m)
+            session.pop('_flashes', None)
+            flash('Comment Added')
+        db_session.commit()
+        messages = models.MessageBoard.query.filter(models.MessageBoard.feature_id == feature_identifier).order_by(models.MessageBoard.date.asc())
+        return render_template('feature.html',feature=feature, messages=messages, name=session['username'])
+    return redirect(url_for('index'))
+
 
 @app.route('/featurerequest', methods=['Post'])
 def save_featurerequest():
@@ -79,20 +125,18 @@ def save_featurerequest():
     targetDate = request.form['inputDate']
     url = request.form['inputURL']
     productArea = request.form['selectProduct']
-    addedby = 1
-    addeddate = datetime.datetime.now()
     active = 1
-    assigned = 1
+    status = 1
+    userassigned = "Unassigned"
+
     f = models.Feature(title, description, client, clientPriority, datetime.datetime.strptime(targetDate, '%Y-%m-%d'),
-                       url, productArea, addedby, addeddate, active, assigned)
+                       url, productArea, active, userassigned, status)
     prioritycheck = models.Feature.query.filter(
         models.Feature.clientPriority == clientPriority and models.Feature.client == client).count()
     if prioritycheck > 0:
-        print(client)
         reshuffle = models.Feature.query.filter(models.Feature.client_id == client).filter(
                 models.Feature.clientPriority >= clientPriority)
         for r in reshuffle:
-            print(prioritycheck)
             m = models.Feature.query.filter(models.Feature.id == r.id).update(
                 {"clientPriority": models.Feature.clientPriority + 1})
     db_session.add(f)
@@ -116,23 +160,10 @@ def fillclient():
     return jsonify(data)
 
 
-@app.route('/ViewFeatures', methods=['Get'])
-def viewFeatures():
-    client = models.Client.query.all()
-    product = models.ProductArea.query.all()
-    cliententries = [dict(client_id=c.id, clientName=c.client) for c in client]
-    productentries = [dict(product_id=p.id, productName=p.productarea) for p in product]
-    data = {
-        'status': 'OK',
-        'clients': cliententries,
-        'products': productentries
-    }
-
-
 @app.route('/fillfeaturerequest', methods=['Post'])
 def fillpriority():
     client = request.form['client_id']
-    priority = models.Feature.query.filter(models.Feature.client_id == client).count() + 1
+    priority = models.Feature.query.filter(models.Feature.client_id == client).filter(models.Feature.completed <= 2).count() + 1
 
     data = {
         'status': 'OK',

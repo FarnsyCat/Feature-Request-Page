@@ -1,0 +1,82 @@
+{% extends "header.html" %}
+{% block content %}
+{% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="alert alert-success" style="text-align: center" id="alert">
+                    {% for message in messages %}
+                    {{ message }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+<title>{{ feature.title }}</title>
+<form role="form" method="post" action="/features/{{ feature.id }}">
+    <div class="panel panel-primary" style="text-align: center">
+      <div class="panel-heading"><h4>{{ feature.title }}</h4></div>
+      <div class="panel-body">
+    <table class="table table-striped" width="100%">
+        <tr>
+            <td>
+                Client: {{ feature.client.client }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                 Product Area: {{ feature.product.productarea }}
+            </td>
+        </tr>
+        {% if feature.clientPriority > 0 %}
+        <tr>
+            <td>
+                 Priority: {{ feature.clientPriority }}
+            </td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td>
+                 Url: <a href="{{ feature.url }}">{{ feature.url }}</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                 Description: {{ feature.description }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                 Assigned: {{ feature.assigned }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                 Status: {{ feature.status.status }}
+            </td>
+        </tr>
+        </table>
+          {% if feature.status.status == "Open" %}<button type="submit" name="submit" value='Assign' class="btn btn-primary">Assign Me</button>{% endif %}
+          {% if feature.assigned == name %}<button type="submit" name="submit" value='Complete' class="btn btn-primary">Complete</button>{% endif %}
+      </div>
+</div>
+    <table width="100%">
+        {% for message in messages %}
+        <tr>
+            <td>
+                <u>{{ message.date.strftime("%Y-%m-%d %H:%M:%S") }}</u>
+                {{ message.username }} said :
+            </td>
+            <td width="90%">
+                <div class="well">{{ message.message }}</div>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="form-group">
+  <label for="comment">Comment:</label>
+  <textarea class="form-control" rows="6" id="comment" name="comment"></textarea>
+        <div style="text-align: center">
+            </br>
+            <button type="submit" class="btn btn-success" name="submit" value="AddComment">Add Comment</button>
+        </div>
+</div>
+    </form>
+{% endblock %}

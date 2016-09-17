@@ -11,21 +11,21 @@
             <th>Priority</th>
             <th>Client Name</th>
             <th>Area</th>
-            <th>Url</th>
-            <th>Description</th>
             <th>Target Date</th>
+            <th>Assigned</th>
+            <th>Status</th>
         </tr>
         </thead>
         <tbody>
         {% for feature in featurerequest %}
         <tr>
-            <td>{{ feature.title }}</td>
-            <td>{{ feature.clientPriority }}</td>
+            <td><a href="/features/{{ feature.id }}">{{ feature.title }}</a></td>
+            <td>{% if feature.clientPriority > 0 %}{{ feature.clientPriority }}{% else %}Complete{% endif %}</td>
             <td>{{ feature.client.client }}</td>
             <td>{{ feature.product.productarea }}</td>
-            <td>{{ feature.url }}</td>
-            <td>{{ feature.description }}</td>
             <td>{{ feature.targetDate.strftime('%Y-%m-%d') }}</td>
+            <td>{{ feature.assigned }}</td>
+            <td>{{ feature.status.status }}</td>
         </tr>
         {% endfor %}
         <tfoot>
@@ -34,14 +34,13 @@
             <th>Priority</th>
             <th>Client Name</th>
             <th style="display: none">Area</th>
-            <th style="display: none">Url</th>
-            <th style="display: none">Description</th>
             <th style="display: none">Target Date</th>
+            <th style="display: none">Assigned</th>
+            <th style="display: none">Status</th>
         </tr>
         </tfoot>
         </tbody>
     </table>
-</div>
 <div><p></p></div>
 
 {% endblock %}

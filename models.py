@@ -1,6 +1,7 @@
 from sqlalchemy import *
 from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import *
+from datetime import datetime
 
 from database import Base
 
@@ -61,18 +62,17 @@ class Feature(Base):
     targetDate = Column(DateTime)
     url = Column(String(100))
     productArea = Column(Integer, ForeignKey('productarea.id'), nullable=False)
-    addedby = Column(Integer, ForeignKey('users.id'), nullable=False)
-    addeddate = Column(DateTime)
     active = Column(Integer, nullable=False)
-    assigned_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    assigned = Column(Integer, ForeignKey('users.name'), nullable=False)
+    completed = Column(Integer, ForeignKey('status.id'), default=1)
 
     client = relationship('Client', foreign_keys='Feature.client_id')
     product = relationship('ProductArea', foreign_keys='Feature.productArea')
-    useradded = relationship('User', foreign_keys='Feature.addedby')
-    userassigned = relationship('User', foreign_keys='Feature.assigned_id')
+    userassigned = relationship('User', foreign_keys='Feature.assigned')
+    status = relationship('FeatureStatus', foreign_keys='Feature.completed')
 
     def __init__(self, title=None, description=None, client_id=None, clientPriority=None, targetDate=None, url=None,
-                 productArea=None, addedby=None, addeddate=None, active=None, assigned_id=None):
+                 productArea=None, active=None, assigned=None, completed=None):
         self.title = title
         self.description = description
         self.client_id = client_id
@@ -80,14 +80,39 @@ class Feature(Base):
         self.targetDate = targetDate
         self.url = url
         self.productArea = productArea
-        self.addedby = addedby
-        self.addeddate = addeddate
         self.active = active
-        self.assigned_id = assigned_id
+        self.assigned = assigned
+        self.completed = completed
 
     def __repr__(self):
-        return "<Feature(id='%d', title='%s', description='%s', clientid='%d', clientname='%s', clientPriority='%d', targetDate='%s', url='%s', productArea_id='%d', productarea='%s', assigned_id='%d', userassigned='%s', addeddate='%s', useradded='%s', addedby='%d', active='%d') >" % (
+        return "<Feature(id='%d', title='%s', description='%s', clientid='%d', clientname='%s', clientPriority='%d', url='%s', productArea_id='%d', productarea='%s', userassigned='%s', active='%d') >" % (
             self.id, self.title, self.description, self.client_id, self.client.client, self.clientPriority,
             self.targetDate,
-            self.url, self.productArea, self.product.productarea, self.assigned_id, self.userassigned.name,
-            self.addeddate, self.useradded.name, self.addedby, self.active)
+            self.url, self.productArea, self.product.productarea, self.userassigned,
+             self.active)
+
+class FeatureStatus(Base):
+    __tablename__ = 'status'
+    id = Column(Integer, primary_key=True)
+    status = Column(String(10))
+
+    def __repr__(self):
+        return self.status
+
+class MessageBoard(Base):
+    __tablename__ = 'messageboard'
+    id = Column(Integer, primary_key=True)
+    date = Column(DateTime, nullable=False)
+    message = Column(String(2000))
+    username = Column(String(50))
+    feature_id = Column(Integer, ForeignKey('feature.id'))
+    feature = relationship("Feature", foreign_keys='MessageBoard.feature_id')
+
+    def __init__(self, message=None, username=None, feature_id=None, date=None):
+        self.message = message
+        self.username = username
+        self.feature_id = feature_id
+        self.date = date
+
+    def __repr__(self):
+        return self.message

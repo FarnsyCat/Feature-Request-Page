@@ -60,7 +60,7 @@ class Feature(db.Model):
     url = db.Column(String(100))
     productArea = db.Column(Integer, ForeignKey('productarea.id'), nullable=False)
     active = db.Column(Integer, nullable=False)
-    assigned = db.Column(Integer, ForeignKey('users.name'), nullable=False)
+    assigned = db.Column(String(50), ForeignKey('users.name'), nullable=False)
     completed = db.Column(Integer, ForeignKey('status.id'), default=1)
 
     client = relationship('Client', foreign_keys='Feature.client_id')

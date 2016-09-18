@@ -213,7 +213,6 @@ admin.add_view(ModelView(models.Client, db.session))
 admin.add_view(ModelView(models.ProductArea, db.session))
 admin.add_view(ModelView(models.FeatureStatus, db.session))
 admin.add_view(ModelView(models.User, db.session))
-admin.add_view(ModelView(models.Feature, db.session))
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):

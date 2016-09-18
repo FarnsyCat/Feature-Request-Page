@@ -194,8 +194,9 @@ def clientspage():
     return render_template("adminclients.html");
 
 
+app.secret_key = 'so1-super2-secret3-key4'
+
 if __name__ == '__main__':
-    app.secret_key = 'so1-super2-secret3-key4'
     app.config['SESSION_TYPE'] = 'filesystem'
     app.run()
 

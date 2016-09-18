@@ -2,18 +2,17 @@ from sqlalchemy import *
 from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import *
 from datetime import datetime
+from feature_request import db
 
-from database import Base
 
-
-class User(Base):
+class User(db.Model):
     __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50), unique=True)
-    email = Column(String(120), unique=True)
-    password = Column(String(255))
-    active = Column(Boolean())
-    role = Column(String(40))
+    id = db.db.Column(Integer, primary_key=True)
+    name = db.Column(String(50), unique=True)
+    email = db.Column(String(120), unique=True)
+    password = db.Column(String(255))
+    active = db.Column(Boolean())
+    role = db.Column(String(40))
 
     def __init__(self, name=None, email=None, password=None, active=None, confirmed_at=None, role=None):
         self.name = name
@@ -28,10 +27,10 @@ class User(Base):
         self.id, self.name, self.email, self.password, self.active, self.confirmed_at, self.role)
 
 
-class Client(Base):
+class Client(db.Model):
     __tablename__ = 'client'
-    id = Column(Integer, primary_key=True)
-    client = Column(String(50))
+    id = db.Column(Integer, primary_key=True)
+    client = db.Column(String(50))
 
     def __init__(self, client=None):
         self.client = client
@@ -40,10 +39,10 @@ class Client(Base):
         return "<Client(id='%d', client='%s'>" % (self.id, self.client)
 
 
-class ProductArea(Base):
+class ProductArea(db.Model):
     __tablename__ = 'productarea'
-    id = Column(Integer, primary_key=True)
-    productarea = Column(String(50))
+    id = db.Column(Integer, primary_key=True)
+    productarea = db.Column(String(50))
 
     def __init__(self, productarea=None):
         self.productarea = productarea
@@ -52,19 +51,19 @@ class ProductArea(Base):
         return '<id %d, productarea %s>' % (self.id, self.productarea)
 
 
-class Feature(Base):
+class Feature(db.Model):
     __tablename__ = 'feature'
-    id = Column(Integer, primary_key=True)
-    title = Column(String(50))
-    description = Column(String(200))
-    client_id = Column(Integer, ForeignKey('client.id'), nullable=False)
-    clientPriority = Column(Integer)
-    targetDate = Column(DateTime)
-    url = Column(String(100))
-    productArea = Column(Integer, ForeignKey('productarea.id'), nullable=False)
-    active = Column(Integer, nullable=False)
-    assigned = Column(Integer, ForeignKey('users.name'), nullable=False)
-    completed = Column(Integer, ForeignKey('status.id'), default=1)
+    id = db.Column(Integer, primary_key=True)
+    title = db.Column(String(50))
+    description = db.Column(String(200))
+    client_id = db.Column(Integer, ForeignKey('client.id'), nullable=False)
+    clientPriority = db.Column(Integer)
+    targetDate = db.Column(DateTime)
+    url = db.Column(String(100))
+    productArea = db.Column(Integer, ForeignKey('productarea.id'), nullable=False)
+    active = db.Column(Integer, nullable=False)
+    assigned = db.Column(Integer, ForeignKey('users.name'), nullable=False)
+    completed = db.Column(Integer, ForeignKey('status.id'), default=1)
 
     client = relationship('Client', foreign_keys='Feature.client_id')
     product = relationship('ProductArea', foreign_keys='Feature.productArea')
@@ -91,21 +90,21 @@ class Feature(Base):
             self.url, self.productArea, self.product.productarea, self.userassigned,
              self.active)
 
-class FeatureStatus(Base):
+class FeatureStatus(db.Model):
     __tablename__ = 'status'
-    id = Column(Integer, primary_key=True)
-    status = Column(String(10))
+    id = db.Column(Integer, primary_key=True)
+    status = db.Column(String(10))
 
     def __repr__(self):
         return self.status
 
-class MessageBoard(Base):
+class MessageBoard(db.Model):
     __tablename__ = 'messageboard'
-    id = Column(Integer, primary_key=True)
-    date = Column(DateTime, nullable=False)
-    message = Column(String(2000))
-    username = Column(String(50))
-    feature_id = Column(Integer, ForeignKey('feature.id'))
+    id = db.Column(Integer, primary_key=True)
+    date = db.Column(DateTime, nullable=False)
+    message = db.Column(String(2000))
+    username = db.Column(String(50))
+    feature_id = db.Column(Integer, ForeignKey('feature.id'))
     feature = relationship("Feature", foreign_keys='MessageBoard.feature_id')
 
     def __init__(self, message=None, username=None, feature_id=None, date=None):

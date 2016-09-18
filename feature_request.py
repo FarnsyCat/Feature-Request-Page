@@ -1,18 +1,27 @@
+import os
+from flask_heroku import Heroku
 from flask import Flask, render_template, request, jsonify, flash, session, redirect, url_for
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_sqlalchemy import SQLAlchemy
 import datetime
 import models
-from database import *
 import bcrypt
 
+
 app = Flask(__name__)
-init_db()
+heroku = Heroku(app)
+heroku.init_app(app)
+db = SQLAlchemy(app)
+db.create_all([None])
+
 
 admin = Admin(app, name='Feature Request Administration', template_mode='bootstrap3')
-admin.add_view(ModelView(models.Client, db_session))
-admin.add_view(ModelView(models.ProductArea, db_session))
+admin.add_view(ModelView(models.Client, db.session))
+admin.add_view(ModelView(models.ProductArea, db.session))
+
 username = "";
+
 
 
 @app.route('/')
@@ -48,8 +57,8 @@ def register():
         if existing_user == 0:
             hashpass = bcrypt.hashpw(request.form['pass'].encode('utf-8'), bcrypt.gensalt())
             f = models.User(name=request.form['username'], password=hashpass, active=1)
-            db_session.add(f)
-            db_session.commit()
+            db.session.add(f)
+            db.session.commit()
             session['username'] = request.form['username']
             return redirect(url_for('index'))
         session.pop('_flashes', None)
@@ -102,15 +111,15 @@ def save_item_info(feature_identifier):
                     print(prioritycheck)
                     m = models.Feature.query.filter(models.Feature.id == r.id).update(
                         {"clientPriority": models.Feature.clientPriority - 1})
-            db_session.commit()
+            db.session.commit()
             session.pop('_flashes', None)
             flash('Completed!')
         elif request.form['submit']=='AddComment' and len(request.form['comment']) > 0:
             m = models.MessageBoard(request.form['comment'], session['username'], feature_identifier, datetime.datetime.now())
-            db_session.add(m)
+            db.session.add(m)
             session.pop('_flashes', None)
             flash('Comment Added')
-        db_session.commit()
+        db.session.commit()
         messages = models.MessageBoard.query.filter(models.MessageBoard.feature_id == feature_identifier).order_by(models.MessageBoard.date.asc())
         return render_template('feature.html',feature=feature, messages=messages, name=session['username'])
     return redirect(url_for('index'))
@@ -139,8 +148,8 @@ def save_featurerequest():
         for r in reshuffle:
             m = models.Feature.query.filter(models.Feature.id == r.id).update(
                 {"clientPriority": models.Feature.clientPriority + 1})
-    db_session.add(f)
-    db_session.commit()
+    db.session.add(f)
+    db.session.commit()
     session.pop('_flashes', None)
     flash('New Feature Request Added')
     return render_template("featurerequest.html", name=session['username'])
@@ -203,4 +212,4 @@ if __name__ == '__main__':
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
-    db_session.remove()
+    db.session.remove()

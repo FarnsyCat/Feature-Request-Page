@@ -31,10 +31,9 @@ def index():
 @app.route('/login', methods=['POST'])
 def login():
     login_user = models.User.query.filter(models.User.name == request.form['username'])
-    salt = bcrypt.gensalt()
     if login_user.count() == 1:
         for r in login_user:
-            hashed = bcrypt.hashpw(request.form['pass'].encode('utf-8'), r.password.encode('utf-8'))
+            hashed = bcrypt.hashpw(request.form['pass'], r.password)
             if hashed == r.password and request.form['username'] == r.name:
                 session['username'] = request.form['username']
                 session['userrole'] = r.role
@@ -50,7 +49,7 @@ def register():
     if request.method == 'POST':
         existing_user = models.User.query.filter(models.User.name == request.form['username']).count()
         if existing_user == 0:
-            hashpass = bcrypt.hashpw(request.form['pass'].encode('utf-8'), bcrypt.gensalt())
+            hashpass = bcrypt.hashpw(request.form['pass'], bcrypt.gensalt())
             f = models.User(name=request.form['username'], password=hashpass, active=True)
             db.session.add(f)
             db.session.commit()

@@ -33,7 +33,9 @@ def login():
     login_user = models.User.query.filter(models.User.name == request.form['username'])
     if login_user.count() == 1:
         for r in login_user:
-            hashed = bcrypt.hashpw(request.form['pass'], r.password)
+            password = request.form['pass']
+            storedpass = r.password
+            hashed = bcrypt.hashpw(password, storedpass)
             if hashed == r.password and request.form['username'] == r.name:
                 session['username'] = request.form['username']
                 session['userrole'] = r.role
@@ -49,7 +51,8 @@ def register():
     if request.method == 'POST':
         existing_user = models.User.query.filter(models.User.name == request.form['username']).count()
         if existing_user == 0:
-            hashpass = bcrypt.hashpw(request.form['pass'], bcrypt.gensalt())
+            password = request.form['pass']
+            hashpass = bcrypt.hashpw(password, bcrypt.gensalt())
             f = models.User(name=request.form['username'], password=hashpass, active=True)
             db.session.add(f)
             db.session.commit()

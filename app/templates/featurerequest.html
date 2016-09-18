@@ -18,9 +18,6 @@
                 <div class="form-group" role="form" style="text-align: left">
                     <label for="inputTitle">Title</label>
                     <input class="form-control" type="Text" id="inputTitle" name="inputTitle" required>
-                    <label for="inputDescription">Description</label>
-                    <input class="form-control" type="Text" aria-multiline="true" id="inputDescription"
-                           name="inputDescription" required/>
                     <label for="selectClient">Client</label>
                     <select required data-bind="options: clientlist, optionsValue: 'client_id', value: selectedChoice,
                        optionsText: 'clientName', optionsCaption: optionsCaptionClient, event: { change: selectionChanged }"
@@ -35,12 +32,15 @@
                     <input class="form-control" id="inputDate" type="date" name="inputDate" placeholder="YYYY-MM-DD"
                            data-date-split-input="true" required/>
                     <label for="inputURL">URL</label>
-                    <input required class="form-control" type="url" id="inputURL" name="inputURL"/>
+                    <input required class="form-control" type="url" id="inputURL" name="inputURL" maxlength="100"/>
                     <label for="selectProduct">Product Area</label>
                     <select required data-bind="options: productlist, optionsValue: 'product_id',
                        optionsText: 'productName', optionsCaption: optionsCaptionProduct" class="form-control"
                             id="selectProduct" name="selectProduct">
                     </select>
+                    <label for="inputDescription" maxlength="50">Description</label>
+                    <input style="height: 400px"class="form-control" type="Text" aria-multiline="true" id="inputDescription"
+                           name="inputDescription" maxlength="9000" required/>
                     <br/>
                 </div>
                 <button disable type="submit" class="btn btn-primary">Submit</button>

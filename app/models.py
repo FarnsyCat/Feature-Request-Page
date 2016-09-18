@@ -53,7 +53,7 @@ class Feature(db.Model):
     __tablename__ = 'feature'
     id = db.Column(Integer, primary_key=True)
     title = db.Column(String(50))
-    description = db.Column(String(200))
+    description = db.Column(String(9000))
     client_id = db.Column(Integer, ForeignKey('client.id'), nullable=False)
     clientPriority = db.Column(Integer)
     targetDate = db.Column(DateTime)
@@ -100,7 +100,7 @@ class MessageBoard(db.Model):
     __tablename__ = 'messageboard'
     id = db.Column(Integer, primary_key=True)
     date = db.Column(DateTime, nullable=False)
-    message = db.Column(String(2000))
+    message = db.Column(String(4000))
     username = db.Column(String(50))
     feature_id = db.Column(Integer, ForeignKey('feature.id'))
     feature = relationship("Feature", foreign_keys='MessageBoard.feature_id')

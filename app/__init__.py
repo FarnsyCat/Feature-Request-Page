@@ -51,7 +51,7 @@ def register():
         existing_user = models.User.query.filter(models.User.name == request.form['username']).count()
         if existing_user == 0:
             hashpass = bcrypt.hashpw(request.form['pass'].encode('utf-8'), bcrypt.gensalt())
-            f = models.User(name=request.form['username'], password=hashpass, active=1)
+            f = models.User(name=request.form['username'], password=hashpass, active=True)
             db.session.add(f)
             db.session.commit()
             session['username'] = request.form['username']

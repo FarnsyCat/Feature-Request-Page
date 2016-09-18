@@ -1,2 +1,2 @@
-web: gunicorn feature_request.wsgi --log-file -
-web: gunicorn feature_request:app
+web: gunicorn run.wsgi --log-file -
+web: gunicorn run:app

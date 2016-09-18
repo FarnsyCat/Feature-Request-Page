@@ -3,9 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a2d54804-cea6-4abf-a7c6-07a26c414354" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feature_request.py" afterPath="$PROJECT_DIR$/feature_request.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models.py" afterPath="$PROJECT_DIR$/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/requirements.txt" />
     </list>
     <ignored path="Feature-Request-Page.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -722,7 +719,14 @@
       <option name="project" value="LOCAL" />
       <updated>1474159023190</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="deployed db">
+      <created>1474216249838</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1474216249838</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TodoView">
@@ -783,7 +787,8 @@
     <MESSAGE value="added table for client features" />
     <MESSAGE value="Stable Release" />
     <MESSAGE value="Finale release" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finale release" />
+    <MESSAGE value="deployed db" />
+    <option name="LAST_COMMIT_MESSAGE" value="deployed db" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -34,7 +34,7 @@ def login():
     salt = bcrypt.gensalt()
     if login_user.count() == 1:
         for r in login_user:
-            hashed = bcrypt.hashpw(request.form['pass'].encode('utf-8'), r.password)
+            hashed = bcrypt.hashpw(request.form['pass'].encode('utf-8'), r.password.encode('utf-8'))
             if hashed == r.password and request.form['username'] == r.name:
                 session['username'] = request.form['username']
                 session['userrole'] = r.role

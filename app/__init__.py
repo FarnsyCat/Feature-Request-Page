@@ -4,13 +4,17 @@ import bcrypt
 from flask import Flask, render_template, request, jsonify, flash, session, redirect, url_for
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from run import db
-from app import models
+from flask_heroku import Heroku
+from flask_sqlalchemy import SQLAlchemy
+
+
 
 app = Flask(__name__)
-
-
-
+heroku = Heroku(app)
+heroku.init_app(app)
+db = SQLAlchemy(app)
+from app import models
+db.create_all([None])
 username = "";
 
 
@@ -198,6 +202,7 @@ def clientspage():
 
 
 app.secret_key = 'so1-super2-secret3-key4'
+
 
 
 

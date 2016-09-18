@@ -5,7 +5,7 @@ from app import db
 
 class User(db.Model):
     __tablename__ = 'users'
-    id = db.db.Column(Integer, primary_key=True)
+    id = db.Column(Integer, primary_key=True)
     name = db.Column(String(50), unique=True)
     email = db.Column(String(120), unique=True)
     password = db.Column(String(255))

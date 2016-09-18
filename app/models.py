@@ -1,8 +1,6 @@
 from sqlalchemy import *
 from sqlalchemy.orm import *
-from sqlalchemy.ext.declarative import *
-from datetime import datetime
-from feature_request import db
+from app import db
 
 
 class User(db.Model):

@@ -1,13 +1,13 @@
-import os
-from flask_heroku import Heroku
+import datetime
+
+import bcrypt
 from flask import Flask, render_template, request, jsonify, flash, session, redirect, url_for
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_heroku import Heroku
 from flask_sqlalchemy import SQLAlchemy
-import datetime
-import models
-import bcrypt
 
+from app import models
 
 app = Flask(__name__)
 heroku = Heroku(app)
@@ -84,7 +84,8 @@ def display_features():
 def show_item_info(feature_identifier):
     if 'username' in session:
         feature = models.Feature.query.get(feature_identifier)
-        messages = models.MessageBoard.query.filter(models.MessageBoard.feature_id == feature_identifier).order_by(models.MessageBoard.date.asc())
+        messages = models.MessageBoard.query.filter(models.MessageBoard.feature_id == feature_identifier).order_by(
+            models.MessageBoard.date.asc())
         return render_template('feature.html',feature=feature, messages=messages, name=session['username'])
     return redirect(url_for('index'))
 
@@ -120,7 +121,8 @@ def save_item_info(feature_identifier):
             session.pop('_flashes', None)
             flash('Comment Added')
         db.session.commit()
-        messages = models.MessageBoard.query.filter(models.MessageBoard.feature_id == feature_identifier).order_by(models.MessageBoard.date.asc())
+        messages = models.MessageBoard.query.filter(models.MessageBoard.feature_id == feature_identifier).order_by(
+            models.MessageBoard.date.asc())
         return render_template('feature.html',feature=feature, messages=messages, name=session['username'])
     return redirect(url_for('index'))
 
@@ -144,7 +146,7 @@ def save_featurerequest():
         models.Feature.clientPriority == clientPriority and models.Feature.client == client).count()
     if prioritycheck > 0:
         reshuffle = models.Feature.query.filter(models.Feature.client_id == client).filter(
-                models.Feature.clientPriority >= clientPriority)
+            models.Feature.clientPriority >= clientPriority)
         for r in reshuffle:
             m = models.Feature.query.filter(models.Feature.id == r.id).update(
                 {"clientPriority": models.Feature.clientPriority + 1})
@@ -172,7 +174,8 @@ def fillclient():
 @app.route('/fillfeaturerequest', methods=['Post'])
 def fillpriority():
     client = request.form['client_id']
-    priority = models.Feature.query.filter(models.Feature.client_id == client).filter(models.Feature.completed <= 2).count() + 1
+    priority = models.Feature.query.filter(models.Feature.client_id == client).filter(
+        models.Feature.completed <= 2).count() + 1
 
     data = {
         'status': 'OK',
@@ -205,9 +208,6 @@ def clientspage():
 
 app.secret_key = 'so1-super2-secret3-key4'
 
-if __name__ == '__main__':
-    app.config['SESSION_TYPE'] = 'filesystem'
-    app.run()
 
 
 @app.teardown_appcontext

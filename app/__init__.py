@@ -4,21 +4,12 @@ import bcrypt
 from flask import Flask, render_template, request, jsonify, flash, session, redirect, url_for
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from flask_heroku import Heroku
-from flask_sqlalchemy import SQLAlchemy
-
+from run import db
 from app import models
 
 app = Flask(__name__)
-heroku = Heroku(app)
-heroku.init_app(app)
-db = SQLAlchemy(app)
-db.create_all([None])
 
 
-admin = Admin(app, name='Feature Request Administration', template_mode='bootstrap3')
-admin.add_view(ModelView(models.Client, db.session))
-admin.add_view(ModelView(models.ProductArea, db.session))
 
 username = "";
 
@@ -209,6 +200,10 @@ def clientspage():
 app.secret_key = 'so1-super2-secret3-key4'
 
 
+
+admin = Admin(app, name='Feature Request Administration', template_mode='bootstrap3')
+admin.add_view(ModelView(models.Client, db.session))
+admin.add_view(ModelView(models.ProductArea, db.session))
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):

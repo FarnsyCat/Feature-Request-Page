@@ -211,6 +211,8 @@ app.secret_key = 'so1-super2-secret3-key4'
 admin = Admin(app, name='Feature Request Administration', template_mode='bootstrap3')
 admin.add_view(ModelView(models.Client, db.session))
 admin.add_view(ModelView(models.ProductArea, db.session))
+admin.add_view(ModelView(models.FeatureStatus, db.session))
+admin.add_view(ModelView(models.User, db.session))
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
